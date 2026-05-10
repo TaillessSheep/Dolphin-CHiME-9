@@ -216,3 +216,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Data and output files
+data/
+outputs/
+*.mp4
+*.wav
+*.safetensors
