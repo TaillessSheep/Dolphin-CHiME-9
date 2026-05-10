@@ -223,3 +223,6 @@ outputs/
 *.mp4
 *.wav
 *.safetensors
+
+# tmp files
+tmp/

@@ -27,8 +27,9 @@ SPLIT="${1:-dev}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Unpacked dataset layout lives under repo ../data (override with EXTRACT_DIR).
 EXTRACT_DIR="${EXTRACT_DIR:-${SCRIPT_DIR}/../data}"
+# Zip downloads land here (override with DATA_DIR): repo-root tmp/ (not cwd).
+DATA_DIR="${DATA_DIR:-${SCRIPT_DIR}/../tmp}"
 
-DATA_DIR="${DATA_DIR:-data/chime9_mcorec}"
 REPO_URL="https://huggingface.co/datasets/MCoRecChallenge/MCoRec/resolve/main"
 
 if [[ -z "${HF_TOKEN:-}" ]]; then
@@ -44,20 +45,31 @@ cd "${DATA_DIR}"
 
 download_file() {
   local filename="$1"
+  local url="${REPO_URL}/${filename}"
   echo ""
   echo "Downloading ${filename} ..."
-  wget --continue \
-    --header="Authorization: Bearer ${HF_TOKEN}" \
-    "${REPO_URL}/${filename}"
+  if command -v wget >/dev/null 2>&1; then
+    wget --continue \
+      --header="Authorization: Bearer ${HF_TOKEN}" \
+      "${url}"
+  elif command -v curl >/dev/null 2>&1; then
+    curl -fL --continue-at - \
+      -H "Authorization: Bearer ${HF_TOKEN}" \
+      -o "${filename}" \
+      "${url}"
+  else
+    echo "ERROR: Need wget or curl to download."
+    exit 1
+  fi
 }
 
 unzip_file() {
   local filename="$1"
   echo ""
-  echo "Unzipping ${filename} into ${EXTRACT_DIR} ..."
-  unzip -o "${filename}" -d "${EXTRACT_DIR}"
-  rm -f "${filename}"
-  echo "Removed ${filename}"
+  echo "Unzipping ${filename}.zip into ${EXTRACT_DIR}/${filename}/ ..."
+  unzip -o "${filename}.zip" -d "${EXTRACT_DIR}/${filename}"
+  rm -f "${filename}.zip"
+  echo "Removed ${filename}.zip"
 }
 
 download_split() {
@@ -69,24 +81,24 @@ download_split() {
       download_file "dev_only_central_videos.zip"
       download_file "dev_without_central_videos.zip"
 
-      unzip_file "dev_only_central_videos.zip"
-      unzip_file "dev_without_central_videos.zip"
+      unzip_file "dev_only_central_videos"
+      unzip_file "dev_without_central_videos"
       ;;
 
     train)
       download_file "train_only_central_videos.zip"
       download_file "train_without_central_videos.zip"
 
-      unzip_file "train_only_central_videos.zip"
-      unzip_file "train_without_central_videos.zip"
+      unzip_file "train_only_central_videos"
+      unzip_file "train_without_central_videos"
       ;;
 
     eval)
       download_file "eval_only_central_videos.zip"
       download_file "eval_without_central_videos.zip"
 
-      unzip_file "eval_only_central_videos.zip"
-      unzip_file "eval_without_central_videos.zip"
+      unzip_file "eval_only_central_videos"
+      unzip_file "eval_without_central_videos"
       ;;
 
     all)
@@ -107,10 +119,10 @@ download_split "${SPLIT}"
 
 echo ""
 echo "Download complete."
-echo "Extracted to:"
-echo "  ${EXTRACT_DIR}"
+echo "Unpacked dataset lives under (one folder per zip):"
+echo "  ${EXTRACT_DIR}/<name>/"
 echo "Zip staging directory:"
-echo "  $(pwd)"
+echo "  ${DATA_DIR}"
 echo ""
-echo "Check sessions with:"
-echo "  find $(pwd) -maxdepth 3 -name 'central_video.mp4' | head"
+echo "Example — list central videos:"
+echo "  find \"${EXTRACT_DIR}\" -name 'central_video.mp4' | head"
