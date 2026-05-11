@@ -21,3 +21,14 @@ This repo is meant to be place in the same path as the Dolphin repo, in parallet
 - No full CHiME-9 benchmark reproduction
 - No raw CHiME-9 data or output media stored in this repository
 
+## Repository Structure
+
+Dolphin-CHiME-9/
+├── benchmark/
+│   ├── benchmark_full_model_latency.py
+│   └── benchmark_video_encoder_latency.py
+├── scripts/
+│   └── download_chime9_mcorec.sh
+├── docs/
+│   └── latency_benchmark.md
+└── README.md
