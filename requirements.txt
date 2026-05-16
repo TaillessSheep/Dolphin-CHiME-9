@@ -1,0 +1,5 @@
+huggingface_hub>=0.24.0
+qwen-asr>=0.1.0
+torch
+torchaudio
+numpy
