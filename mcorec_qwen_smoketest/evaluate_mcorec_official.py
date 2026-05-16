@@ -8,7 +8,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from common_mcorec import write_json
+from mcorec_qwen_smoketest.common_mcorec import write_json
 
 
 def parse_evaluator_output(text: str) -> dict:

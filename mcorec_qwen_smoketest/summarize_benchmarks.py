@@ -5,7 +5,7 @@ import argparse
 from pathlib import Path
 from typing import Any, Dict
 
-from common_mcorec import load_json, write_json
+from mcorec_qwen_smoketest.common_mcorec import load_json, write_json
 
 
 def metric(d: Dict[str, Any], *keys: str, default: float = 0.0) -> float:

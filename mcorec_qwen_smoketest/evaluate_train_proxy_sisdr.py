@@ -11,7 +11,7 @@ from typing import Any, Dict, Optional, Tuple
 import torch
 import torchaudio
 
-from common_mcorec import extract_wav, load_metadata, read_jsonl, require_ffmpeg
+from mcorec_qwen_smoketest.common_mcorec import extract_wav, load_metadata, read_jsonl, require_ffmpeg
 
 
 def si_sdr(est: torch.Tensor, ref: torch.Tensor, eps: float = 1e-8) -> float:

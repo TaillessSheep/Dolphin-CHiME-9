@@ -8,7 +8,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, Iterable, List
 
-from common_mcorec import (
+from mcorec_qwen_smoketest.common_mcorec import (
     make_cluster_mapping,
     read_jsonl,
     speaker_sort_key,

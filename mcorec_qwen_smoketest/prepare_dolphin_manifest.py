@@ -7,7 +7,7 @@ import sys
 import time
 from pathlib import Path
 
-from common_mcorec import (
+from mcorec_qwen_smoketest.common_mcorec import (
     CENTRAL_ASD_SEGMENTATION_DEFAULTS,
     SegmentRecord,
     compute_track_activity,
